@@ -4,7 +4,7 @@ Application Android native développée en Kotlin avec Jetpack Compose pour conn
 
 **Développé par** : Perrine Honoré
 
-## 🏗️ Architecture
+## Architecture
 
 Architecture **Clean Architecture** avec séparation en 3 couches :
 
@@ -17,7 +17,7 @@ Pattern **MVVM** avec :
 - **Compose UI** : Interface utilisateur déclarative
 - **StateFlow** : Flux réactifs pour l'état UI
 
-## 📁 Structure du Projet
+## Structure du Projet
 
 ```
 allinconnect-android/
@@ -32,7 +32,7 @@ allinconnect-android/
     └── settings.gradle.kts          # Configuration modules
 ```
 
-## 🛠️ Technologies
+## Technologies
 
 - **Kotlin** : Langage de programmation
 - **Jetpack Compose** : Framework UI déclaratif
@@ -48,53 +48,53 @@ allinconnect-android/
 - **Google Play Services Location** : Géolocalisation
 - **Stripe Android SDK** : Paiements et abonnements
 
-## ✨ Fonctionnalités
+## Fonctionnalités
 
-### Authentification ✅
+### Authentification
 - Login, Signup, Forgot Password, Reset Password
 - Gestion des tokens JWT (DataStore sécurisé)
 - Gestion de session utilisateur
 
-### Offres ✅
+### Offres
 - Liste des offres actives
 - Détail d'une offre
 - Filtres (ville, catégorie, type, dates)
 - Recherche d'offres
 - Gestion des offres Pro (création, modification, archivage)
 
-### Partenaires ✅
+### Partenaires
 - Liste des professionnels
 - Recherche par ville, catégorie, nom
 - Recherche par géolocalisation (rayon)
 - Détail partenaire avec avis
 - Favoris (ajout/suppression)
 
-### Ma Carte CLUB10 ✅
+### Ma Carte CLUB10
 - Carte digitale CLUB10
 - Statistiques d'économies
 - Gestion famille (invitation, membres)
 - Abonnements et paiements Stripe
 
-### Profil ✅
+### Profil
 - Informations utilisateur
 - Modification du profil
 - Changement de mot de passe
 - Préférences de notifications
 - Paramètres
 
-### Features Pro ✅
+### Features Pro
 - Gestion d'établissement
 - Création/modification d'offres
 - Historique des paiements
 - Factures Stripe
 
-### Billing & Payments ✅
+### Billing & Payments
 - Abonnements Stripe
 - Payment Sheet
 - Gestion des abonnements
 - Portail client Stripe
 
-### Autres ✅
+### Autres
 - Wallet (portefeuille)
 - Savings (économies)
 - Ratings (avis)
@@ -102,7 +102,7 @@ allinconnect-android/
 - Cache local
 - Gestion de la géolocalisation
 
-## 🔧 Configuration
+## Configuration
 
 ### Prérequis
 
@@ -150,7 +150,7 @@ cd android
 
 Ou utilisez Android Studio : **Run** (Shift+F10)
 
-## 📱 Informations de l'App
+## Informations de l'App
 
 - **Package** : `com.allinconnect.app`
 - **Version** : 1.0
@@ -159,7 +159,7 @@ Ou utilisez Android Studio : **Run** (Shift+F10)
 - **Target SDK** : 34 (Android 14)
 - **Compile SDK** : 34
 
-## 🔌 Backend API
+## Backend API
 
 L'application se connecte à l'API backend :
 
@@ -177,7 +177,7 @@ Les endpoints sont configurés dans `ApiConfig.kt` et peuvent être modifiés vi
 - **Billing** : `/billing/subscription`, `/billing/payment-sheet`
 - **Subscriptions** : `/subscriptions/plans`, `/subscriptions/subscribe`
 
-## 🎨 Design System
+## Design System
 
 Couleurs principales définies dans `android/app/src/main/res/values/colors.xml` :
 
@@ -189,25 +189,7 @@ Couleurs principales définies dans `android/app/src/main/res/values/colors.xml`
 
 Thème Compose défini dans `presentation/theme/Theme.kt`.
 
-## 📊 Migration iOS → Android
-
-Cette application Android a été portée depuis l'application iOS native. **Tous les fichiers iOS ont été supprimés** après la migration complète.
-
-### Statut de Migration
-
-- ✅ **99+ fichiers Swift supprimés** (tous portés vers Android)
-- ✅ **90+ classes Android créées**
-- ✅ **100% des services et modèles portés**
-- ✅ **100% du code iOS supprimé**
-
-**Services API** : 13/13 portés (100%) ✅  
-**Modèles** : 6/6 portés (100%) ✅  
-**Core Services** : 7/7 portés (100%) ✅  
-**Thème** : 1/1 porté (100%) ✅
-
-Voir `android/MIGRATION_COMPLETE.md`, `android/FILES_DELETED.md` et `android/IOS_CLEANUP_COMPLETE.md` pour les détails.
-
-## 🧪 Tests
+## Tests
 
 ```bash
 # Tests unitaires
@@ -217,12 +199,12 @@ Voir `android/MIGRATION_COMPLETE.md`, `android/FILES_DELETED.md` et `android/IOS
 ./gradlew connectedAndroidTest
 ```
 
-## 📦 Build Variants
+## Build Variants
 
 - **debug** : Version de développement avec suffixe `.debug`
 - **release** : Version de production avec ProGuard activé
 
-## 🚀 Déploiement
+## Déploiement
 
 ### Build Release
 
@@ -238,14 +220,14 @@ L'APK sera généré dans `app/build/outputs/apk/release/`
 2. Configurer `signingConfigs` dans `build.gradle.kts`
 3. Build avec `assembleRelease`
 
-## 📝 Documentation
+## Documentation
 
 - `android/README.md` : Documentation détaillée Android
 - `android/MIGRATION_COMPLETE.md` : État de la migration
 - `android/FILES_DELETED.md` : Liste des fichiers Swift supprimés
 - `android/VERIFICATION_COMPLETE.md` : Vérification finale
 
-## 🤝 Contribution
+## Contribution
 
 Ce projet est en développement actif. Pour contribuer :
 
@@ -253,7 +235,7 @@ Ce projet est en développement actif. Pour contribuer :
 2. Faire vos modifications
 3. Créer une Pull Request
 
-## 📄 Licence
+## Licence
 
 Propriétaire - Tous droits réservés
 
