@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">All In Connect</string>
+    
+    <!-- Common -->
+    <string name="loading">Chargement…</string>
+    <string name="error">Erreur</string>
+    <string name="retry">Réessayer</string>
+    <string name="cancel">Annuler</string>
+    <string name="save">Enregistrer</string>
+    <string name="delete">Supprimer</string>
+    <string name="edit">Modifier</string>
+    <string name="close">Fermer</string>
+    
+    <!-- Auth -->
+    <string name="login">Connexion</string>
+    <string name="signup">Inscription</string>
+    <string name="email">Email</string>
+    <string name="password">Mot de passe</string>
+    <string name="forgot_password">Mot de passe oublié ?</string>
+    
+    <!-- Tabs -->
+    <string name="tab_home">Accueil</string>
+    <string name="tab_offers">Offres</string>
+    <string name="tab_card">Ma Carte</string>
+    <string name="tab_profile">Profil</string>
+</resources>
+
