@@ -2,72 +2,112 @@ package com.allinconnect.app.presentation.auth.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.allinconnect.app.core.auth.AuthTokenManager
+import com.allinconnect.app.core.network.ApiError
+import com.allinconnect.app.core.notifications.PushManager
 import com.allinconnect.app.data.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.util.regex.Pattern
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val authTokenManager: AuthTokenManager,
+    private val pushManager: PushManager
 ) : ViewModel() {
     
-    private val _uiState = MutableStateFlow(LoginUiState())
-    val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
+    private val _email = MutableStateFlow("")
+    val email: StateFlow<String> = _email.asStateFlow()
     
-    fun onEmailChange(email: String) {
-        _uiState.value = _uiState.value.copy(email = email)
-        updateValidation()
+    private val _password = MutableStateFlow("")
+    val password: StateFlow<String> = _password.asStateFlow()
+    
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+    
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
+    
+    private val _loginSuccess = MutableStateFlow(false)
+    val loginSuccess: StateFlow<Boolean> = _loginSuccess.asStateFlow()
+    
+    val isValid: Boolean
+        get() = _email.value.trim().isNotEmpty() &&
+                isValidEmail(_email.value) &&
+                _password.value.isNotEmpty() &&
+                _password.value.length >= 6
+    
+    private fun isValidEmail(email: String): Boolean {
+        val emailRegex = "^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,}$"
+        val pattern = Pattern.compile(emailRegex, Pattern.CASE_INSENSITIVE)
+        return pattern.matcher(email).matches()
     }
     
-    fun onPasswordChange(password: String) {
-        _uiState.value = _uiState.value.copy(password = password)
-        updateValidation()
+    fun updateEmail(email: String) {
+        _email.value = email
+        _errorMessage.value = null
     }
     
-    private fun updateValidation() {
-        val state = _uiState.value
-        val isValid = state.email.isNotBlank() &&
-                android.util.Patterns.EMAIL_ADDRESS.matcher(state.email).matches() &&
-                state.password.length >= 6
-        _uiState.value = state.copy(isValid = isValid)
+    fun updatePassword(password: String) {
+        _password.value = password
+        _errorMessage.value = null
     }
     
     fun login() {
-        val state = _uiState.value
-        if (!state.isValid) {
-            _uiState.value = state.copy(
-                errorMessage = "Veuillez remplir tous les champs correctement"
-            )
+        if (!isValid) {
+            _errorMessage.value = "Remplis tous les champs correctement"
             return
         }
         
-        _uiState.value = state.copy(isLoading = true, errorMessage = null)
-        
         viewModelScope.launch {
-            authRepository.login(state.email, state.password)
-                .onSuccess {
-                    _uiState.value = state.copy(isLoading = false, isLoggedIn = true)
+            _isLoading.value = true
+            _errorMessage.value = null
+            
+            val result = authRepository.login(
+                email = _email.value.trim().lowercase(),
+                password = _password.value
+            )
+            
+            result.fold(
+                onSuccess = {
+                    // Register push token after login
+                    launch {
+                        pushManager.registerTokenAfterLogin()
+                    }
+                    _isLoading.value = false
+                    _loginSuccess.value = true
+                },
+                onFailure = { error ->
+                    _isLoading.value = false
+                    _errorMessage.value = when (error) {
+                        is ApiError.HttpError -> {
+                            when (error.statusCode) {
+                                401, 403 -> "Les informations de connexion sont incorrectes"
+                                404 -> "Compte non trouvé"
+                                else -> error.message ?: "Un problème s'est produit lors de la connexion"
+                            }
+                        }
+                        is ApiError.NetworkError -> "Problème de connexion. Vérifie ta connexion internet."
+                        is ApiError.Unauthorized -> "Les informations de connexion sont incorrectes"
+                        else -> "Les informations de connexion sont incorrectes"
+                    }
                 }
-                .onFailure { error ->
-                    _uiState.value = state.copy(
-                        isLoading = false,
-                        errorMessage = error.message ?: "Erreur lors de la connexion"
-                    )
-                }
+            )
+        }
+    }
+    
+    fun isLoggedIn(): Boolean {
+        return authTokenManager.getTokenSync() != null
+    }
+    
+    fun logout() {
+        viewModelScope.launch {
+            authRepository.logout()
         }
     }
 }
-
-data class LoginUiState(
-    val email: String = "",
-    val password: String = "",
-    val isLoading: Boolean = false,
-    val errorMessage: String? = null,
-    val isValid: Boolean = false,
-    val isLoggedIn: Boolean = false
-)
-

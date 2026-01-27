@@ -13,12 +13,6 @@ enum class OfferCategory {
 }
 
 @Serializable
-enum class OfferType {
-    OFFRE,
-    EVENEMENT
-}
-
-@Serializable
 data class ProfessionalResponse(
     val id: Int? = null,
     val firstName: String? = null,
@@ -34,13 +28,18 @@ data class OfferResponse(
     val id: Int,
     val title: String,
     val description: String,
-    val price: Double? = null,
+    val reduction: String? = null,
+    val discount: String? = null,
     val startDate: String? = null,
     val endDate: String? = null,
     val featured: Boolean? = null,
     val status: String? = null,
     val professional: ProfessionalResponse? = null,
-    val type: String? = null, // "OFFRE" or "EVENEMENT"
-    val imageUrl: String? = null
+    val professionalId: Int? = null,
+    val professionalName: String? = null,
+    val city: String? = null,
+    val category: String? = null,
+    val type: String? = null,
+    val imageUrl: String? = null,
+    val distanceMeters: Double? = null
 )
-

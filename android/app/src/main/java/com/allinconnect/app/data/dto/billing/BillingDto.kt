@@ -3,13 +3,11 @@ package com.allinconnect.app.data.dto.billing
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SubscriptionPaymentSheetResponse(
-    val paymentIntent: String,
+data class PaymentSheetInitResponse(
+    val paymentIntentClientSecret: String,
     val customerId: String,
-    val ephemeralKey: String,
-    val publishableKey: String,
-    val subscriptionId: String? = null,
-    val intentType: String? = null
+    val ephemeralKeySecret: String,
+    val publishableKey: String
 )
 
 @Serializable
@@ -20,14 +18,16 @@ data class SubscriptionStatusResponse(
 )
 
 @Serializable
-data class PortalResponse(
-    val url: String
+data class SubscriptionPaymentSheetResponse(
+    val paymentIntent: String,
+    val customerId: String,
+    val ephemeralKey: String,
+    val publishableKey: String,
+    val subscriptionId: String? = null,
+    val intentType: String? = null
 )
 
 @Serializable
-data class CancelSubscriptionResponse(
-    val id: String,
-    val status: String? = null,
-    val canceledAt: Int? = null
+data class PortalResponse(
+    val url: String
 )
-

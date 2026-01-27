@@ -1,10 +1,9 @@
 package com.allinconnect.app.data.api
 
 import com.allinconnect.app.data.dto.invoice.InvoiceResponse
-import retrofit2.http.GET
+import retrofit2.http.*
 
 interface InvoicesApi {
-    @GET("/billing/invoices")
+    @GET("invoices")
     suspend fun getInvoices(): List<InvoiceResponse>
 }
-

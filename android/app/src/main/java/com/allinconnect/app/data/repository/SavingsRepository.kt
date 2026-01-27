@@ -12,8 +12,7 @@ class SavingsRepository @Inject constructor(
 ) {
     suspend fun getSavings(): Result<List<SavingsResponse>> {
         return try {
-            val response = savingsApi.getSavings()
-            Result.success(response)
+            Result.success(savingsApi.getSavings())
         } catch (e: Exception) {
             Result.failure(ApiError.NetworkError(e))
         }
@@ -21,8 +20,7 @@ class SavingsRepository @Inject constructor(
     
     suspend fun createSavings(request: SavingsRequest): Result<SavingsResponse> {
         return try {
-            val response = savingsApi.createSavings(request)
-            Result.success(response)
+            Result.success(savingsApi.createSavings(request))
         } catch (e: Exception) {
             Result.failure(ApiError.NetworkError(e))
         }
@@ -30,8 +28,7 @@ class SavingsRepository @Inject constructor(
     
     suspend fun updateSavings(id: Int, request: SavingsRequest): Result<SavingsResponse> {
         return try {
-            val response = savingsApi.updateSavings(id, request)
-            Result.success(response)
+            Result.success(savingsApi.updateSavings(id, request))
         } catch (e: Exception) {
             Result.failure(ApiError.NetworkError(e))
         }
@@ -46,4 +43,3 @@ class SavingsRepository @Inject constructor(
         }
     }
 }
-

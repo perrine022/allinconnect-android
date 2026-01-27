@@ -4,16 +4,18 @@ import com.allinconnect.app.data.dto.profile.*
 import retrofit2.http.*
 
 interface ProfileApi {
-    @PUT("/users/profile")
-    suspend fun updateProfile(@Body request: UpdateProfileRequest)
+    @GET("profile/me")
+    suspend fun getUserMe(): UserMeResponse
     
-    @POST("/users/change-password")
-    suspend fun changePassword(@Body request: ChangePasswordRequest)
-    
-    @GET("/users/me/light")
+    @GET("users/me/light")
     suspend fun getUserLight(): UserLightResponse
     
-    @GET("/users/me")
-    suspend fun getUserMe(): UserMeResponse
+    @PUT("profile/update")
+    suspend fun updateProfile(@Body request: UpdateProfileRequest): UserMeResponse
+    
+    @POST("profile/change-password")
+    suspend fun changePassword(@Body request: ChangePasswordRequest): Unit
+    
+    @GET("profile/card")
+    suspend fun getCard(): CardResponse
 }
-

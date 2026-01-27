@@ -12,11 +12,9 @@ class InvoicesRepository @Inject constructor(
 ) {
     suspend fun getInvoices(): Result<List<InvoiceResponse>> {
         return try {
-            val response = invoicesApi.getInvoices()
-            Result.success(response)
+            Result.success(invoicesApi.getInvoices())
         } catch (e: Exception) {
             Result.failure(ApiError.NetworkError(e))
         }
     }
 }
-

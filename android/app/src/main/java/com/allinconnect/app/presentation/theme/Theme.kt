@@ -6,31 +6,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Color(0xFFFF6666), // app_coral
-    secondary = Color(0xFFBF2626), // app_red
-    background = Color(0xFF000000), // app_background
-    surface = Color(0xFF1F1F1F), // app_card_background
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onBackground = Color.White,
-    onSurface = Color.White,
-    error = Color(0xFFB30D0D), // app_dark_red
-    onError = Color.White
+    primary = AppRed,
+    background = AppDarkRed1,
+    surface = AppDarkRed2
 )
 
 @Composable
 fun AllInConnectTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = true,
     content: @Composable () -> Unit
 ) {
     val colorScheme = DarkColorScheme
-    
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
@@ -39,11 +30,10 @@ fun AllInConnectTheme(
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
         }
     }
-    
+
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
         content = content
     )
 }
-

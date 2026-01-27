@@ -4,6 +4,7 @@ data class Partner(
     val id: String,
     val name: String,
     val category: String,
+    val subCategory: String? = null,
     val address: String,
     val city: String,
     val postalCode: String,
@@ -18,7 +19,7 @@ data class Partner(
     val imageName: String,
     val headerImageName: String,
     val establishmentImageUrl: String? = null,
-    val isFavorite: Boolean = false,
-    val apiId: Int? = null
+    var isFavorite: Boolean = false,
+    val apiId: Int? = null,
+    val distanceMeters: Double? = null
 )
-

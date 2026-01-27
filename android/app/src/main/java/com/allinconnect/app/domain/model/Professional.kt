@@ -16,9 +16,8 @@ data class Professional(
     val websiteURL: String? = null,
     val instagramURL: String? = null,
     val description: String? = null,
-    val isFavorite: Boolean = false
+    var isFavorite: Boolean = false
 ) {
     val fullName: String
         get() = "$firstName $lastName"
 }
-

@@ -4,10 +4,9 @@ import com.allinconnect.app.data.dto.notification.*
 import retrofit2.http.*
 
 interface NotificationPreferencesApi {
-    @GET("/notification-preferences")
-    suspend fun getNotificationPreferences(): NotificationPreferencesResponse
+    @GET("notification-preferences")
+    suspend fun getPreferences(): NotificationPreferencesResponse
     
-    @PUT("/notification-preferences")
-    suspend fun updateNotificationPreferences(@Body request: NotificationPreferencesRequest)
+    @PUT("notification-preferences")
+    suspend fun updatePreferences(@Body request: NotificationPreferencesRequest): NotificationPreferencesResponse
 }
-

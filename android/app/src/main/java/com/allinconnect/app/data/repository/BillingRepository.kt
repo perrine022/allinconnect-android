@@ -10,11 +10,9 @@ import javax.inject.Singleton
 class BillingRepository @Inject constructor(
     private val billingApi: BillingApi
 ) {
-    suspend fun createSubscriptionPaymentSheet(priceId: String): Result<SubscriptionPaymentSheetResponse> {
+    suspend fun initPaymentSheet(request: Map<String, Any>): Result<PaymentSheetInitResponse> {
         return try {
-            val request = mapOf("priceId" to priceId)
-            val response = billingApi.createSubscriptionPaymentSheet(request)
-            Result.success(response)
+            Result.success(billingApi.initPaymentSheet(request))
         } catch (e: Exception) {
             Result.failure(ApiError.NetworkError(e))
         }
@@ -22,8 +20,7 @@ class BillingRepository @Inject constructor(
     
     suspend fun getSubscriptionStatus(): Result<SubscriptionStatusResponse> {
         return try {
-            val response = billingApi.getSubscriptionStatus()
-            Result.success(response)
+            Result.success(billingApi.getSubscriptionStatus())
         } catch (e: Exception) {
             Result.failure(ApiError.NetworkError(e))
         }
@@ -31,21 +28,18 @@ class BillingRepository @Inject constructor(
     
     suspend fun createPortalSession(): Result<PortalResponse> {
         return try {
-            val response = billingApi.createPortalSession()
-            Result.success(response)
+            Result.success(billingApi.createPortalSession())
         } catch (e: Exception) {
             Result.failure(ApiError.NetworkError(e))
         }
     }
     
-    suspend fun cancelSubscription(subscriptionId: String): Result<CancelSubscriptionResponse> {
+    suspend fun cancelSubscription(): Result<Unit> {
         return try {
-            val request = mapOf("subscriptionId" to subscriptionId)
-            val response = billingApi.cancelSubscription(request)
-            Result.success(response)
+            billingApi.cancelSubscription()
+            Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(ApiError.NetworkError(e))
         }
     }
 }
-

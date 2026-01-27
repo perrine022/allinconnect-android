@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.location.Location
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.*
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,13 +14,13 @@ import javax.inject.Singleton
 
 @Singleton
 class LocationService @Inject constructor(
-    @ApplicationContext private val context: Context
+    private val context: Context
 ) {
     private val fusedLocationClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
     
-    private val _authorizationStatus = MutableStateFlow<LocationPermissionStatus>(LocationPermissionStatus.NOT_DETERMINED)
-    val authorizationStatus: StateFlow<LocationPermissionStatus> = _authorizationStatus.asStateFlow()
+    private val _authorizationStatus = MutableStateFlow<Int>(PackageManager.PERMISSION_DENIED)
+    val authorizationStatus: StateFlow<Int> = _authorizationStatus.asStateFlow()
     
     private val _currentLocation = MutableStateFlow<Location?>(null)
     val currentLocation: StateFlow<Location?> = _currentLocation.asStateFlow()
@@ -34,69 +33,52 @@ class LocationService @Inject constructor(
     }
     
     fun checkPermissionStatus() {
-        val hasFineLocation = ContextCompat.checkSelfPermission(
+        val hasPermission = ContextCompat.checkSelfPermission(
             context,
             Manifest.permission.ACCESS_FINE_LOCATION
         ) == PackageManager.PERMISSION_GRANTED
         
-        val hasCoarseLocation = ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ) == PackageManager.PERMISSION_GRANTED
-        
-        _authorizationStatus.value = when {
-            hasFineLocation || hasCoarseLocation -> LocationPermissionStatus.GRANTED
-            else -> LocationPermissionStatus.DENIED
+        _authorizationStatus.value = if (hasPermission) {
+            PackageManager.PERMISSION_GRANTED
+        } else {
+            PackageManager.PERMISSION_DENIED
         }
     }
     
     fun requestLocationPermission() {
+        // Permission request should be handled in Activity/Fragment
         checkPermissionStatus()
-        // La permission doit être demandée depuis l'Activity/Fragment
-        // Cette méthode vérifie juste le statut
     }
     
     fun startLocationUpdates() {
-        if (_authorizationStatus.value != LocationPermissionStatus.GRANTED) {
+        if (_authorizationStatus.value != PackageManager.PERMISSION_GRANTED) {
             return
         }
         
-        val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 10000)
-            .setMinUpdateIntervalMillis(5000)
-            .build()
+        val locationRequest = LocationRequest.Builder(
+            Priority.PRIORITY_HIGH_ACCURACY,
+            10000L // 10 seconds
+        ).build()
         
         val locationCallback = object : LocationCallback() {
             override fun onLocationResult(result: LocationResult) {
-                result.lastLocation?.let { location ->
-                    _currentLocation.value = location
-                    _locationError.value = null
-                }
+                _currentLocation.value = result.lastLocation
+                _locationError.value = null
             }
         }
         
-        try {
-            fusedLocationClient.requestLocationUpdates(
-                locationRequest,
-                locationCallback,
-                context.mainLooper
-            )
-        } catch (e: SecurityException) {
-            _locationError.value = "Permission de localisation refusée"
-        }
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            context.mainLooper
+        )
     }
     
     fun stopLocationUpdates() {
-        // Nécessite un LocationCallback pour arrêter, à implémenter si nécessaire
+        // LocationCallback should be stored and removed
     }
     
     fun calculateDistance(from: Location, to: Location): Double {
-        return from.distanceTo(to) / 1000.0 // Distance en kilomètres
+        return from.distanceTo(to) / 1000.0 // Distance in kilometers
     }
 }
-
-enum class LocationPermissionStatus {
-    NOT_DETERMINED,
-    GRANTED,
-    DENIED
-}
-

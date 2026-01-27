@@ -4,13 +4,9 @@ import com.allinconnect.app.data.dto.wallet.*
 import retrofit2.http.*
 
 interface WalletApi {
-    @GET("/wallet/history")
+    @GET("wallet/history")
     suspend fun getWalletHistory(): List<WalletHistoryResponse>
     
-    @POST("/wallet/request")
+    @POST("wallet/request")
     suspend fun createWalletRequest(@Body request: WalletRequest): WalletRequestResponse
-    
-    @GET("/wallet/requests")
-    suspend fun getWalletRequests(): List<WalletRequestResponse>
 }
-

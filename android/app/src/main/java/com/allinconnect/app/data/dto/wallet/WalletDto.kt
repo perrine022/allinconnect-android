@@ -32,4 +32,3 @@ data class WalletRequest(
     val amount: Double,
     val professionals: String
 )
-

@@ -1,29 +1,26 @@
 package com.allinconnect.app.data.api
 
-import com.allinconnect.app.data.dto.offer.OfferCategory
 import com.allinconnect.app.data.dto.partner.PartnerProfessionalResponse
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface PartnersApi {
-    @GET("/users/professionals")
-    suspend fun getAllProfessionals(): List<PartnerProfessionalResponse>
-    
-    @GET("/users/professionals/by-city")
-    suspend fun getProfessionalsByCity(@Query("city") city: String): List<PartnerProfessionalResponse>
-    
-    @GET("/users/professionals/search")
-    suspend fun searchProfessionals(
+    @GET("users/professionals")
+    suspend fun getAllProfessionals(
         @Query("city") city: String? = null,
         @Query("category") category: String? = null,
-        @Query("name") name: String? = null,
-        @Query("lat") latitude: Double? = null,
-        @Query("lon") longitude: Double? = null,
-        @Query("radius") radius: Double? = null
+        @Query("latitude") latitude: Double? = null,
+        @Query("longitude") longitude: Double? = null,
+        @Query("radius") radius: Double? = null,
+        @Query("club10") club10: Boolean? = null
     ): List<PartnerProfessionalResponse>
     
-    @GET("/users/{id}")
+    @GET("users/professionals/{id}")
     suspend fun getProfessionalById(@Path("id") id: Int): PartnerProfessionalResponse
+    
+    @GET("users/professionals/search")
+    suspend fun searchProfessionals(
+        @Query("query") query: String? = null,
+        @Query("city") city: String? = null,
+        @Query("category") category: String? = null
+    ): List<PartnerProfessionalResponse>
 }
-

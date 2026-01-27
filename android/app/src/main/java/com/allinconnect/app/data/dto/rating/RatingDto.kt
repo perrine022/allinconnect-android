@@ -11,8 +11,10 @@ data class RatingRequest(
 
 @Serializable
 data class RaterResponse(
+    val id: Int,
     val firstName: String,
-    val lastName: String
+    val lastName: String,
+    val profilePicture: String? = null
 )
 
 @Serializable
@@ -23,4 +25,3 @@ data class RatingResponse(
     val createdAt: String,
     val rater: RaterResponse? = null
 )
-

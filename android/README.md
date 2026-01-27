@@ -1,316 +1,257 @@
-# All In Connect - Android
+# AllInConnect - Application Android
 
-Application Android native développée en Kotlin avec Jetpack Compose pour connecter les utilisateurs avec des professionnels locaux et bénéficier d'avantages exclusifs via le CLUB10.
+Application Android native pour AllInConnect, développée avec Kotlin et Jetpack Compose.
 
-## 🏗️ Architecture
+## 📋 Prérequis
 
-Architecture **Clean Architecture** avec séparation en 3 couches :
+- **Android Studio**: Hedgehog (2023.1.1) ou supérieur
+- **JDK**: 17 ou supérieur
+- **Android SDK**: API 34 (Android 14)
+- **Gradle**: 8.0+ (inclus dans le projet)
 
-- **Presentation** : Jetpack Compose UI, ViewModels, Navigation
-- **Domain** : Modèles de domaine, interfaces de repositories, use cases
-- **Data** : DTOs, API Retrofit, implémentations de repositories, mappers
+## 🚀 Démarrage Rapide
 
-Pattern **MVVM** avec :
-- **ViewModels** : Gestion d'état et logique métier
-- **Compose UI** : Interface utilisateur déclarative
-- **StateFlow** : Flux réactifs pour l'état UI
+### 1. Ouvrir le Projet
 
-## 📁 Structure
+1. Ouvrir **Android Studio**
+2. **File > Open** > Sélectionner le dossier `android/`
+3. Attendre la synchronisation Gradle (première fois: 5-10 minutes)
 
-```
-app/src/main/java/com/allinconnect/app/
-├── core/
-│   ├── auth/              # AuthTokenManager (gestion tokens)
-│   ├── cache/             # CacheService (cache local)
-│   ├── config/            # ApiConfig
-│   ├── location/          # LocationService (géolocalisation)
-│   ├── network/           # NetworkModule, ApiError
-│   ├── notifications/     # PushManager (notifications Firebase)
-│   ├── payment/           # PaymentStatusManager
-│   ├── state/             # AppState (état global)
-│   └── utils/             # ImageURLHelper, DefaultImageHelper
-├── data/
-│   ├── api/               # 13 interfaces Retrofit
-│   │   ├── AuthApi
-│   │   ├── OffersApi
-│   │   ├── PartnersApi
-│   │   ├── ProfileApi
-│   │   ├── BillingApi
-│   │   ├── SubscriptionsApi
-│   │   ├── WalletApi
-│   │   ├── SavingsApi
-│   │   ├── FavoritesApi
-│   │   ├── RatingsApi
-│   │   ├── NotificationPreferencesApi
-│   │   ├── InvoicesApi
-│   │   ├── PaymentApi
-│   │   └── PushApi
-│   ├── dto/               # Data Transfer Objects (50+)
-│   │   ├── auth/
-│   │   ├── offer/
-│   │   ├── partner/
-│   │   ├── profile/
-│   │   ├── billing/
-│   │   ├── subscription/
-│   │   ├── wallet/
-│   │   ├── savings/
-│   │   ├── rating/
-│   │   ├── notification/
-│   │   ├── invoice/
-│   │   └── payment/
-│   ├── mapper/            # Mappers DTO -> Domain
-│   │   └── OfferMapper
-│   └── repository/        # 13 repositories
-│       ├── AuthRepository
-│       ├── OffersRepository
-│       ├── PartnersRepository
-│       ├── ProfileRepository
-│       ├── BillingRepository
-│       ├── SubscriptionsRepository
-│       ├── WalletRepository
-│       ├── SavingsRepository
-│       ├── FavoritesRepository
-│       ├── RatingsRepository
-│       ├── NotificationPreferencesRepository
-│       ├── InvoicesRepository
-│       └── PaymentRepository
-├── domain/
-│   └── model/             # Modèles de domaine
-│       ├── User
-│       ├── Offer
-│       ├── Partner
-│       ├── Professional
-│       ├── Review
-│       └── SavingsEntry
-└── presentation/
-    ├── auth/               # LoginScreen, WelcomeScreen, ViewModels
-    ├── home/               # HomeScreen
-    ├── offers/              # OffersScreen
-    ├── partners/            # (à implémenter)
-    ├── card/                # CardScreen
-    ├── profile/             # ProfileScreen
-    ├── navigation/          # AppNavigation
-    └── theme/               # AllInConnectTheme
-```
+### 2. Configurer l'Émulateur ou Appareil
 
-## 🛠️ Technologies
+- **Tools > Device Manager**
+- **Create Device** > Choisir un appareil (ex: Pixel 7)
+- **System Image**: API 34 (Android 14)
 
-- **Kotlin** : Langage de programmation
-- **Jetpack Compose** : Framework UI déclaratif
-- **Hilt** : Injection de dépendances
-- **Retrofit + OkHttp** : Networking
-- **Kotlinx Serialization** : Sérialisation JSON
-- **Coroutines + Flow** : Programmation asynchrone
-- **DataStore** : Stockage sécurisé (tokens)
-- **Navigation Compose** : Navigation
-- **Timber** : Logging
-- **Coil** : Chargement d'images
-- **Firebase Messaging** : Notifications push
-- **Google Play Services Location** : Géolocalisation
+### 3. Lancer l'Application
 
-## ✨ Fonctionnalités principales
+- **Run** (Shift+F10) ou cliquer sur le bouton ▶️
 
-### Authentification ✅
-- ✅ Login, Signup, Forgot Password, Reset Password
-- ✅ Gestion des tokens JWT (DataStore sécurisé)
-- ✅ Gestion de session utilisateur
-
-### Offres ✅
-- ✅ Liste des offres actives
-- ✅ Détail d'une offre
-- ✅ Filtres (ville, catégorie, type, dates)
-- ✅ Recherche d'offres
-- ✅ Gestion des offres Pro (création, modification, archivage)
-
-### Partenaires ✅
-- ✅ Liste des professionnels
-- ✅ Recherche par ville, catégorie, nom
-- ✅ Recherche par géolocalisation (rayon)
-- ✅ Détail partenaire avec avis
-- ✅ Favoris (ajout/suppression)
-
-### Ma Carte ✅
-- ✅ Carte digitale CLUB10
-- ✅ Statistiques d'économies
-- ✅ Gestion famille (invitation, membres)
-- ✅ Abonnements et paiements
-
-### Profil ✅
-- ✅ Informations utilisateur
-- ✅ Modification du profil
-- ✅ Changement de mot de passe
-- ✅ Préférences de notifications
-- ✅ Paramètres
-
-### Features Pro ✅
-- ✅ Gestion d'établissement
-- ✅ Création/modification d'offres
-- ✅ Historique des paiements
-- ✅ Factures Stripe
-
-### Billing & Payments ✅
-- ✅ Abonnements Stripe
-- ✅ Payment Sheet
-- ✅ Gestion des abonnements
-- ✅ Portail client Stripe
-
-### Autres ✅
-- ✅ Wallet (portefeuille)
-- ✅ Savings (économies)
-- ✅ Ratings (avis)
-- ✅ Notifications push (Firebase)
-- ✅ Cache local
-- ✅ Gestion de la géolocalisation
-
-## 🔧 Configuration
-
-### Variables d'environnement
-
-Créez un fichier `local.properties` à la racine du projet Android :
-
-```properties
-API_BASE_URL=http://127.0.0.1:8080/api/v1
-API_BASE_URL_PRODUCTION=https://allinconnect-back-1.onrender.com/api/v1
-```
-
-### Firebase
-
-1. Téléchargez `google-services.json` depuis Firebase Console
-2. Placez-le dans `app/`
-3. Le projet ID est : `allinconnect-a79b5`
-
-### Build
+### Ligne de Commande
 
 ```bash
 cd android
+chmod +x gradlew
 ./gradlew assembleDebug
-```
-
-### Run
-
-```bash
 ./gradlew installDebug
 ```
 
-## 📝 Informations
+## 🌐 Configuration Backend
 
-- **Version** : 1.0
-- **Package** : `com.allinconnect.app`
-- **Min SDK** : 24 (Android 7.0)
-- **Target SDK** : 34 (Android 14)
-- **Compile SDK** : 34
+### Backend Render (Production)
 
-## 🔌 Backend
+**URL**: `https://allinconnect-back-1.onrender.com/api/v1`
 
-L'application se connecte à l'API backend :
-- **Local** : `http://127.0.0.1:8080/api/v1`
-- **Production** : `https://allinconnect-back-1.onrender.com/api/v1`
+Le projet est configuré pour utiliser le backend Render par défaut.
 
-Les endpoints sont configurés dans `ApiConfig.kt` et peuvent être modifiés via `local.properties`.
+**Configuration**:
+- `gradle.properties`: Définit `API_BASE_URL_PRODUCTION`
+- `build.gradle.kts`: BuildConfig avec fallback vers Render si `API_BASE_URL` non défini
+- `ApiConfig.kt`: Utilise `BuildConfig.API_BASE_URL`
+- `NetworkModule.kt`: Configure Retrofit avec cette URL
 
-## ✅ Classes portées depuis iOS
+**Par défaut**: Si `API_BASE_URL` n'est pas défini dans `gradle.properties`, l'app utilise automatiquement Render.
 
-### Services API (13/13) ✅
-- ✅ AuthAPIService → AuthApi + AuthRepository
-- ✅ OffersAPIService → OffersApi + OffersRepository
-- ✅ PartnersAPIService → PartnersApi + PartnersRepository
-- ✅ ProfileAPIService → ProfileApi + ProfileRepository
-- ✅ BillingAPIService → BillingApi + BillingRepository
-- ✅ SubscriptionsAPIService → SubscriptionsApi + SubscriptionsRepository
-- ✅ WalletAPIService → WalletApi + WalletRepository
-- ✅ SavingsAPIService → SavingsApi + SavingsRepository
-- ✅ FavoritesAPIService → FavoritesApi + FavoritesRepository
-- ✅ RatingsAPIService → RatingsApi + RatingsRepository
-- ✅ NotificationPreferencesAPIService → NotificationPreferencesApi + NotificationPreferencesRepository
-- ✅ InvoicesAPIService → InvoicesApi + InvoicesRepository
-- ✅ PaymentAPIService → PaymentApi + PaymentRepository
-- ✅ APIService → NetworkModule (Retrofit + OkHttp)
+### Utiliser un Backend Local
 
-### Modèles (6/6) ✅
-- ✅ User → User (domain)
-- ✅ Offer → Offer (domain)
-- ✅ Partner → Partner (domain)
-- ✅ Professional → Professional (domain)
-- ✅ Review → Review (domain)
-- ✅ SavingsEntry → SavingsEntry (domain)
+Modifier `android/gradle.properties`:
+```properties
+API_BASE_URL=http://127.0.0.1:8080/api/v1
+```
 
-### Core Services (7/7) ✅
-- ✅ AppState → AppState (core.state)
-- ✅ ImageURLHelper → ImageURLHelper (core.utils)
-- ✅ DefaultImageHelper → DefaultImageHelper (core.utils)
-- ✅ LocationService → LocationService (core.location)
-- ✅ PushManager → PushManager (core.notifications)
-- ✅ PaymentStatusManager → PaymentStatusManager (core.payment)
-- ✅ CacheService → CacheService (core.cache)
+Pour un appareil physique, utiliser l'IP de votre machine:
+```properties
+API_BASE_URL=http://192.168.1.X:8080/api/v1
+```
 
-### DTOs (50+) ✅
-- ✅ Tous les DTOs nécessaires créés pour chaque service
+Puis rebuild:
+```bash
+./gradlew clean
+./gradlew assembleDebug
+```
 
-### Écrans de base ✅
-- ✅ TutorialScreen
-- ✅ WelcomeScreen
-- ✅ LoginScreen + LoginViewModel
-- ✅ TabBarScreen
-- ✅ HomeScreen, OffersScreen, CardScreen, ProfileScreen (squelettes)
+### Vérifier la Connexion Backend
 
-## 🚧 À compléter (UI spécifique)
+1. Lancer l'app
+2. Ouvrir **Logcat** dans Android Studio
+3. Filtrer par tag: `OkHttp`
+4. Rechercher: `allinconnect-back-1.onrender.com`
+5. Vérifier les requêtes HTTP (200 = OK)
 
-### ViewModels manquants
-- [ ] SignUpViewModel
-- [ ] HomeViewModel
-- [ ] OffersViewModel
-- [ ] OfferDetailViewModel
-- [ ] PartnersListViewModel
-- [ ] PartnerDetailViewModel
-- [ ] CardViewModel
-- [ ] ProfileViewModel
-- [ ] EditProfileViewModel
-- [ ] ChangePasswordViewModel
-- [ ] NotificationPreferencesViewModel
-- [ ] ProOffersViewModel
-- [ ] CreateOfferViewModel
-- [ ] ManageSubscriptionsViewModel
-- [ ] InvoicesViewModel
-- [ ] WalletViewModel
-- [ ] BillingViewModel
+## 📱 Informations de l'App
 
-### Écrans à implémenter
-- [ ] SignUpScreen
-- [ ] ForgotPasswordScreen
-- [ ] OfferDetailScreen
-- [ ] PartnersListScreen
-- [ ] PartnerDetailScreen
-- [ ] Tous les écrans Profile (Settings, EditProfile, etc.)
-- [ ] Tous les écrans Pro
-- [ ] Tous les écrans Card (Savings, Family, etc.)
-- [ ] Tous les écrans Billing
+- **Package**: `com.allinconnect.app`
+- **Version**: 1.0
+- **Min SDK**: 24 (Android 7.0 Nougat)
+- **Target SDK**: 34 (Android 14)
+- **Compile SDK**: 34
 
-### Composants UI réutilisables
-- [ ] Tous les composants Core/Components (OfferCard, PartnerCard, etc.)
+## 🏗️ Architecture
 
-### Mappers manquants
-- [ ] PartnerMapper
-- [ ] ProfessionalMapper
-- [ ] ReviewMapper
-- [ ] SavingsMapper
-- [ ] ProfileMapper
+- **Langage**: Kotlin
+- **UI**: Jetpack Compose
+- **Architecture**: Clean Architecture (Presentation / Domain / Data)
+- **Pattern**: MVVM
+- **DI**: Hilt
+- **Networking**: Retrofit + OkHttp
+- **JSON**: Kotlinx Serialization
+- **Async**: Kotlin Coroutines + Flow
+- **Persistence**: DataStore (tokens/settings)
+- **Logging**: Timber
+- **Build**: Gradle Kotlin DSL
 
-## 📱 Installation
+## 📦 Structure du Projet
 
-1. Cloner le repository
-2. Ouvrir le projet dans Android Studio
-3. Configurer `local.properties` avec les URLs API
-4. Ajouter `google-services.json` pour Firebase (si nécessaire)
-5. Build et Run
+```
+android/
+├── app/
+│   └── src/main/java/com/allinconnect/app/
+│       ├── core/              # Services core (auth, network, location, etc.)
+│       ├── data/              # Couche data (API, DTOs, repositories)
+│       ├── domain/            # Modèles domain
+│       └── presentation/       # UI (screens, ViewModels, navigation)
+│           ├── auth/          # Écrans d'authentification
+│           ├── billing/       # Écrans de facturation
+│           ├── card/          # Écrans de carte
+│           ├── home/          # Écran d'accueil
+│           ├── offer/         # Détail offre
+│           ├── offers/        # Liste offres
+│           ├── onboarding/    # Onboarding
+│           ├── partner/       # Détail partenaire
+│           ├── partners/      # Liste partenaires
+│           ├── pro/           # Écrans professionnels
+│           ├── profile/       # Écrans profil
+│           ├── splash/        # Splash screen
+│           ├── tabs/          # Tab bar
+│           └── components/    # Composants UI réutilisables
+```
 
-## 📊 Migration
+## ✅ Fonctionnalités
 
-- **26 fichiers Swift supprimés** (tous portés vers Android)
-- **80+ classes Android créées**
-- **100% des services et modèles portés**
+### Authentification
+- ✅ Login / SignUp
+- ✅ Forgot Password
+- ✅ Gestion des tokens (DataStore sécurisé)
 
-Voir `MIGRATION_COMPLETE.md` et `FILES_DELETED.md` pour les détails.
+### Offres & Partenaires
+- ✅ Liste des offres
+- ✅ Détail d'une offre
+- ✅ Liste des partenaires
+- ✅ Détail d'un partenaire
+- ✅ Recherche de partenaires
+
+### Carte CLUB10
+- ✅ Informations de la carte
+- ✅ Gestion de la carte famille
+- ✅ Liste des économies
+- ✅ Statistiques
+
+### Profil
+- ✅ Édition du profil
+- ✅ Changement de mot de passe
+- ✅ Préférences de notifications
+- ✅ Paramètres
+- ✅ Parrainage
+
+### Abonnements & Paiements
+- ✅ Abonnement client/pro
+- ✅ Gestion des abonnements
+- ✅ Stripe Payment Sheet
+- ✅ Stripe Subscription Payment Sheet
+
+### Features Pro
+- ✅ Gestion des offres
+- ✅ Création d'offres
+- ✅ Gestion de l'établissement
+- ✅ Historique des paiements
+- ✅ Factures
+- ✅ Gestion des abonnements clients
+
+## 📊 Endpoints Backend
+
+Tous les **43 endpoints** sont configurés et connectés:
+
+- Auth: 4 endpoints
+- Offers: 6 endpoints
+- Partners: 3 endpoints
+- Profile: 5 endpoints
+- Billing: 4 endpoints
+- Subscriptions: 4 endpoints
+- Savings: 4 endpoints
+- Favorites: 3 endpoints
+- Ratings: 2 endpoints
+- Wallet: 2 endpoints
+- Notification Preferences: 2 endpoints
+- Invoices: 1 endpoint
+- Payment: 2 endpoints
+- Push: 1 endpoint
+
+## 🔐 Sécurité
+
+- **Token Storage**: DataStore sécurisé (équivalent Keychain iOS)
+- **Token Management**: Ajout automatique dans headers HTTP via `AuthInterceptor`
+- **Permissions**: Toutes déclarées dans `AndroidManifest.xml`
+
+## 🔥 Firebase (Optionnel)
+
+Pour activer les notifications push:
+
+1. Télécharger `google-services.json` depuis Firebase Console
+2. Le placer dans `android/app/`
+3. Project ID: `allinconnect-a79b5`
+
+**Note**: L'app fonctionne sans Firebase, mais les notifications push ne seront pas disponibles.
+
+## 🐛 Dépannage
+
+### Build échoue
+```bash
+cd android
+./gradlew clean
+./gradlew assembleDebug
+```
+
+### Gradle sync échoue
+1. **File > Invalidate Caches / Restart**
+2. **File > Sync Project with Gradle Files**
+
+### App ne se connecte pas au backend
+1. Vérifier Logcat (tag `OkHttp`)
+2. Vérifier que l'URL contient `allinconnect-back-1.onrender.com`
+3. Vérifier la connexion internet
+4. Vérifier que le backend Render est actif
+
+## 📚 Dépendances Principales
+
+- **Compose**: BOM 2023.10.01
+- **Hilt**: 2.48
+- **Retrofit**: 2.9.0
+- **OkHttp**: 4.12.0
+- **Kotlinx Serialization**: 1.6.0
+- **Coroutines**: 1.7.3
+- **DataStore**: 1.0.0
+- **Stripe**: 20.37.1
+- **Firebase**: BOM 32.7.0
+
+## ✅ Checklist de Démarrage
+
+- [ ] Android Studio installé
+- [ ] JDK 17 installé
+- [ ] Android SDK 34 installé
+- [ ] Projet ouvert dans Android Studio
+- [ ] Gradle sync réussi
+- [ ] Appareil/émulateur connecté
+- [ ] App lancée avec succès
+- [ ] Backend Render accessible (vérifier Logcat)
+- [ ] Login fonctionne
+
+## 📝 Notes
+
+- Les logs HTTP sont activés en debug (voir `NetworkModule.kt`)
+- Le token est automatiquement ajouté dans les headers HTTP
+- Tous les écrans sont accessibles via la navigation
+- Tous les ViewModels sont injectés via Hilt
 
 ---
 
-**Développé par** : Perrine Honoré
+**Le projet est prêt à être lancé !** 🚀

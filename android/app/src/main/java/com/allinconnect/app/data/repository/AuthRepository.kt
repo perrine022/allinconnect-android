@@ -8,7 +8,6 @@ import com.allinconnect.app.data.dto.auth.ForgotPasswordRequest
 import com.allinconnect.app.data.dto.auth.LoginRequest
 import com.allinconnect.app.data.dto.auth.RegistrationRequest
 import com.allinconnect.app.data.dto.auth.ResetPasswordRequest
-import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -19,11 +18,8 @@ class AuthRepository @Inject constructor(
 ) {
     suspend fun login(email: String, password: String): Result<AuthResponse> {
         return try {
-            val request = LoginRequest(
-                email = email.trim().lowercase(),
-                password = password
-            )
-            val response = authApi.authenticate(request)
+            val request = LoginRequest(email, password)
+            val response = authApi.login(request)
             authTokenManager.saveToken(response.token)
             Result.success(response)
         } catch (e: Exception) {
@@ -43,7 +39,7 @@ class AuthRepository @Inject constructor(
     
     suspend fun forgotPassword(email: String): Result<Unit> {
         return try {
-            val request = ForgotPasswordRequest(email = email)
+            val request = ForgotPasswordRequest(email)
             authApi.forgotPassword(request)
             Result.success(Unit)
         } catch (e: Exception) {
@@ -53,7 +49,7 @@ class AuthRepository @Inject constructor(
     
     suspend fun resetPassword(token: String, newPassword: String): Result<Unit> {
         return try {
-            val request = ResetPasswordRequest(token = token, newPassword = newPassword)
+            val request = ResetPasswordRequest(token, newPassword)
             authApi.resetPassword(request)
             Result.success(Unit)
         } catch (e: Exception) {
@@ -61,12 +57,7 @@ class AuthRepository @Inject constructor(
         }
     }
     
-    suspend fun isLoggedIn(): Boolean {
-        return authTokenManager.hasToken()
-    }
-    
     suspend fun logout() {
         authTokenManager.removeToken()
     }
 }
-

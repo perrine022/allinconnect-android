@@ -9,8 +9,7 @@ data class InvoiceResponse(
     val status: String,
     val hostedInvoiceUrl: String? = null,
     val invoicePdf: String? = null,
-    val created: Int,
+    val created: Long,
     val currency: String,
     val number: String? = null
 )
-

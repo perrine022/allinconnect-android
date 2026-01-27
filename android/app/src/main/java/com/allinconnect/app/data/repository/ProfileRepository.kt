@@ -10,19 +10,9 @@ import javax.inject.Singleton
 class ProfileRepository @Inject constructor(
     private val profileApi: ProfileApi
 ) {
-    suspend fun updateProfile(request: UpdateProfileRequest): Result<Unit> {
+    suspend fun getUserMe(): Result<UserMeResponse> {
         return try {
-            profileApi.updateProfile(request)
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Result.failure(ApiError.NetworkError(e))
-        }
-    }
-    
-    suspend fun changePassword(request: ChangePasswordRequest): Result<Unit> {
-        return try {
-            profileApi.changePassword(request)
-            Result.success(Unit)
+            Result.success(profileApi.getUserMe())
         } catch (e: Exception) {
             Result.failure(ApiError.NetworkError(e))
         }
@@ -30,20 +20,34 @@ class ProfileRepository @Inject constructor(
     
     suspend fun getUserLight(): Result<UserLightResponse> {
         return try {
-            val response = profileApi.getUserLight()
-            Result.success(response)
+            Result.success(profileApi.getUserLight())
         } catch (e: Exception) {
             Result.failure(ApiError.NetworkError(e))
         }
     }
     
-    suspend fun getUserMe(): Result<UserMeResponse> {
+    suspend fun updateProfile(request: UpdateProfileRequest): Result<UserMeResponse> {
         return try {
-            val response = profileApi.getUserMe()
-            Result.success(response)
+            Result.success(profileApi.updateProfile(request))
+        } catch (e: Exception) {
+            Result.failure(ApiError.NetworkError(e))
+        }
+    }
+    
+    suspend fun changePassword(oldPassword: String, newPassword: String): Result<Unit> {
+        return try {
+            profileApi.changePassword(ChangePasswordRequest(oldPassword, newPassword))
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(ApiError.NetworkError(e))
+        }
+    }
+    
+    suspend fun getCard(): Result<CardResponse> {
+        return try {
+            Result.success(profileApi.getCard())
         } catch (e: Exception) {
             Result.failure(ApiError.NetworkError(e))
         }
     }
 }
-

@@ -12,8 +12,7 @@ class WalletRepository @Inject constructor(
 ) {
     suspend fun getWalletHistory(): Result<List<WalletHistoryResponse>> {
         return try {
-            val response = walletApi.getWalletHistory()
-            Result.success(response)
+            Result.success(walletApi.getWalletHistory())
         } catch (e: Exception) {
             Result.failure(ApiError.NetworkError(e))
         }
@@ -21,21 +20,9 @@ class WalletRepository @Inject constructor(
     
     suspend fun createWalletRequest(amount: Double, professionals: String): Result<WalletRequestResponse> {
         return try {
-            val request = WalletRequest(amount = amount, professionals = professionals)
-            val response = walletApi.createWalletRequest(request)
-            Result.success(response)
-        } catch (e: Exception) {
-            Result.failure(ApiError.NetworkError(e))
-        }
-    }
-    
-    suspend fun getWalletRequests(): Result<List<WalletRequestResponse>> {
-        return try {
-            val response = walletApi.getWalletRequests()
-            Result.success(response)
+            Result.success(walletApi.createWalletRequest(WalletRequest(amount, professionals)))
         } catch (e: Exception) {
             Result.failure(ApiError.NetworkError(e))
         }
     }
 }
-

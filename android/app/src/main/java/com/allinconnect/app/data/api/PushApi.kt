@@ -5,7 +5,6 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface PushApi {
-    @POST("/push/register")
-    suspend fun registerToken(@Body request: RegisterTokenRequest)
+    @POST("push/register")
+    suspend fun registerToken(@Body request: RegisterTokenRequest): Unit
 }
-

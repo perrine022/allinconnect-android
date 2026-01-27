@@ -1,87 +1,53 @@
 package com.allinconnect.app.data.mapper
 
-import com.allinconnect.app.core.config.ApiConfig
 import com.allinconnect.app.data.dto.offer.OfferResponse
 import com.allinconnect.app.domain.model.Offer
 import com.allinconnect.app.domain.model.OfferType
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.UUID
+import java.util.*
 
 object OfferMapper {
-    
-    fun OfferResponse.toDomain(): Offer {
-        val offerUUID = UUID.nameUUIDFromBytes(id.toString().toByteArray()).toString()
+    fun toDomain(dto: OfferResponse): Offer {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val displayFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         
-        val businessName = professional?.let { prof ->
-            if (prof.firstName != null && prof.lastName != null) {
-                "${prof.firstName} ${prof.lastName}"
-            } else {
-                prof.firstName ?: "Entreprise"
+        val validUntil = dto.endDate?.let {
+            try {
+                dateFormat.parse(it)?.let { date -> displayFormat.format(date) }
+            } catch (e: Exception) {
+                null
             }
-        } ?: "Entreprise"
+        } ?: "N/A"
         
-        val validUntil = formatDateToFrench(endDate) ?: endDate ?: "N/A"
-        val startDateFormatted = formatDateToFrench(startDate)
+        val startDate = dto.startDate?.let {
+            try {
+                dateFormat.parse(it)?.let { date -> displayFormat.format(date) }
+            } catch (e: Exception) {
+                null
+            }
+        }
         
-        val discount = price?.let { String.format(Locale.FRANCE, "%.2f€", it) } ?: "Sur devis"
-        
-        val offerTypeEnum = when (type?.uppercase()) {
-            "EVENEMENT" -> OfferType.EVENT
+        val discount = dto.reduction ?: dto.discount ?: "0%"
+        val offerType = when (dto.type?.uppercase()) {
+            "EVENT", "EVENEMENT" -> OfferType.EVENT
             else -> OfferType.OFFER
         }
         
-        val isClub10 = featured ?: false
-        
-        val partnerId = professional?.id?.let { profId ->
-            UUID.nameUUIDFromBytes(profId.toString().toByteArray()).toString()
-        }
-        
-        val defaultImage = "tag.fill" // Default SF Symbol equivalent
-        
         return Offer(
-            id = offerUUID,
-            title = title,
-            description = description,
-            businessName = businessName,
+            id = dto.id.toString(),
+            title = dto.title,
+            description = dto.description,
+            businessName = dto.professionalName ?: "Partenaire",
             validUntil = validUntil,
-            startDate = startDateFormatted,
+            startDate = startDate,
             discount = discount,
-            imageName = defaultImage,
-            imageUrl = imageUrl,
-            offerType = offerTypeEnum,
-            isClub10 = isClub10,
-            partnerId = partnerId,
-            apiId = id
+            imageName = "tag.fill",
+            imageUrl = dto.imageUrl,
+            offerType = offerType,
+            isClub10 = false, // TODO: Get from API
+            partnerId = dto.professionalId?.toString(),
+            apiId = dto.id,
+            distanceMeters = dto.distanceMeters
         )
-    }
-    
-    private fun formatDateToFrench(dateString: String?): String? {
-        if (dateString == null) return null
-        
-        val formats = listOf(
-            "yyyy-MM-dd'T'HH:mm:ss",
-            "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'",
-            "yyyy-MM-dd'T'HH:mm:ss'Z'",
-            "yyyy-MM-dd"
-        )
-        
-        for (format in formats) {
-            try {
-                val parser = SimpleDateFormat(format, Locale.getDefault())
-                parser.timeZone = java.util.TimeZone.getTimeZone("UTC")
-                val date = parser.parse(dateString)
-                if (date != null) {
-                    val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.FRANCE)
-                    return formatter.format(date)
-                }
-            } catch (e: Exception) {
-                // Try next format
-            }
-        }
-        
-        return null
     }
 }
-

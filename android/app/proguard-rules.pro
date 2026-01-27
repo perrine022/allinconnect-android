@@ -19,7 +19,7 @@
 -keep class javax.inject.** { *; }
 -keep class * extends dagger.hilt.android.internal.managers.ViewComponentManager$FragmentContextWrapper { *; }
 
-# Keep Kotlin Serialization
+# Keep Kotlinx Serialization
 -keepattributes *Annotation*, InnerClasses
 -dontnote kotlinx.serialization.AnnotationsKt
 -keepclassmembers class kotlinx.serialization.json.** {
@@ -36,7 +36,6 @@
     kotlinx.serialization.KSerializer serializer(...);
 }
 
-# Keep data classes
--keep class com.allinconnect.app.data.dto.** { *; }
+# Keep Data classes
 -keep class com.allinconnect.app.domain.model.** { *; }
-
+-keep class com.allinconnect.app.data.dto.** { *; }

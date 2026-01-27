@@ -17,7 +17,8 @@ data class PartnerProfessionalResponse(
     val userType: String,
     val subscriptionType: String? = null,
     val profession: String? = null,
-    val category: String? = null,
+    val category: OfferCategory? = null,
+    val subCategory: String? = null,
     val hasConnectedBefore: Boolean? = null,
     val referralCode: String? = null,
     val subscriptionPlan: SubscriptionPlanResponse? = null,
@@ -27,18 +28,16 @@ data class PartnerProfessionalResponse(
     val phoneNumber: String? = null,
     val website: String? = null,
     val instagram: String? = null,
-    val openingHours: String? = null
+    val openingHours: String? = null,
+    val distanceMeters: Double? = null,
+    val club10: Boolean? = null,
+    val averageRating: Double? = null,
+    val reviewCount: Int? = null
 )
 
 @Serializable
 data class SubscriptionPlanResponse(
-    val id: Int,
-    val title: String,
-    val description: String? = null,
-    val price: Double,
-    val category: String? = null,
-    val duration: String? = null,
-    val stripePriceId: String? = null,
-    val stripeProductId: String? = null
+    val id: Int? = null,
+    val name: String? = null,
+    val price: Double? = null
 )
-

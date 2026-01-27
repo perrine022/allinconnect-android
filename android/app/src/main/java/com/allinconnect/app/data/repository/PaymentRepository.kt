@@ -10,49 +10,19 @@ import javax.inject.Singleton
 class PaymentRepository @Inject constructor(
     private val paymentApi: PaymentApi
 ) {
-    suspend fun getPublicKey(): Result<String> {
-        return try {
-            val response = paymentApi.getPublicKey()
-            Result.success(response)
-        } catch (e: Exception) {
-            Result.failure(ApiError.NetworkError(e))
-        }
-    }
-    
     suspend fun createPaymentSheet(request: PaymentSheetRequest): Result<PaymentSheetResponse> {
         return try {
-            val response = paymentApi.createPaymentSheet(request)
-            Result.success(response)
+            Result.success(paymentApi.createPaymentSheet(request))
         } catch (e: Exception) {
             Result.failure(ApiError.NetworkError(e))
         }
     }
     
-    suspend fun createPaymentIntent(request: CreatePaymentIntentRequest): Result<CreatePaymentIntentResponse> {
+    suspend fun createPaymentIntent(request: CreatePaymentIntentRequest): Result<PaymentSheetResponse> {
         return try {
-            val response = paymentApi.createPaymentIntent(request)
-            Result.success(response)
-        } catch (e: Exception) {
-            Result.failure(ApiError.NetworkError(e))
-        }
-    }
-    
-    suspend fun createCustomer(): Result<CreateCustomerResponse> {
-        return try {
-            val response = paymentApi.createCustomer()
-            Result.success(response)
-        } catch (e: Exception) {
-            Result.failure(ApiError.NetworkError(e))
-        }
-    }
-    
-    suspend fun getPaymentStatus(paymentIntentId: String): Result<PaymentStatusResponse> {
-        return try {
-            val response = paymentApi.getPaymentStatus(paymentIntentId)
-            Result.success(response)
+            Result.success(paymentApi.createPaymentIntent(request))
         } catch (e: Exception) {
             Result.failure(ApiError.NetworkError(e))
         }
     }
 }
-

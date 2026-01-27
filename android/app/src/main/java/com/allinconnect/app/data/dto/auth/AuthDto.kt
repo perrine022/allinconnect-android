@@ -16,11 +16,13 @@ data class RegistrationRequest(
     val password: String,
     val address: String? = null,
     val city: String? = null,
+    val postalCode: String? = null,
     val birthDate: String? = null,
-    val userType: String, // "CLIENT" or "PROFESSIONAL"
-    val subscriptionType: String, // "FREE" or "PREMIUM"
+    val userType: String? = null,
+    val subscriptionType: String,
     val profession: String? = null,
     val category: String? = null,
+    val subCategory: String? = null,
     val referralCode: String? = null
 )
 
@@ -39,4 +41,3 @@ data class ResetPasswordRequest(
     val token: String,
     val newPassword: String
 )
-

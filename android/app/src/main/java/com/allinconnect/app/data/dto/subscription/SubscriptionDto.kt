@@ -1,7 +1,5 @@
 package com.allinconnect.app.data.dto.subscription
 
-import com.allinconnect.app.data.dto.profile.CardMember
-import com.allinconnect.app.data.dto.profile.PaymentResponse
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -23,38 +21,17 @@ data class CardMembersResponse(
 )
 
 @Serializable
-data class CardOwnerResponse(
-    val isOwner: Boolean
-)
-
-@Serializable
-data class FamilyCardEmailsResponse(
-    val cardId: Int,
-    val ownerEmail: String,
-    val emails: List<String>,
-    val isOwner: Boolean
-)
-
-@Serializable
-data class UpdateFamilyCardEmailsRequest(
-    val emails: List<String>
+data class CardMember(
+    val id: Int,
+    val email: String,
+    val firstName: String? = null,
+    val lastName: String? = null
 )
 
 @Serializable
 data class PaymentIntentResponse(
-    val clientSecret: String,
-    val amount: Double,
-    val currency: String
+    val paymentIntent: String,
+    val customerId: String,
+    val ephemeralKey: String,
+    val publishableKey: String
 )
-
-@Serializable
-data class InviteRequest(
-    val email: String
-)
-
-@Serializable
-data class RemoveMemberRequest(
-    val memberId: Int? = null,
-    val email: String? = null
-)
-

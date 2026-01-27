@@ -25,22 +25,3 @@ data class CreatePaymentIntentRequest(
     val description: String? = null,
     val captureImmediately: Boolean
 )
-
-@Serializable
-data class CreatePaymentIntentResponse(
-    val paymentIntentId: String,
-    val clientSecret: String,
-    val ephemeralKey: String,
-    val publishableKey: String
-)
-
-@Serializable
-data class CreateCustomerResponse(
-    val customerId: String
-)
-
-@Serializable
-data class PaymentStatusResponse(
-    val status: String
-)
-

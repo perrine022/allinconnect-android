@@ -12,30 +12,17 @@ class RatingsRepository @Inject constructor(
 ) {
     suspend fun createRating(ratedId: Int, score: Int, comment: String?): Result<RatingResponse> {
         return try {
-            val request = RatingRequest(ratedId = ratedId, score = score, comment = comment)
-            val response = ratingsApi.createRating(request)
-            Result.success(response)
+            Result.success(ratingsApi.createRating(RatingRequest(ratedId, score, comment)))
         } catch (e: Exception) {
             Result.failure(ApiError.NetworkError(e))
         }
     }
     
-    suspend fun getRatingsByUser(userId: Int): Result<List<RatingResponse>> {
+    suspend fun getRatings(professionalId: Int): Result<List<RatingResponse>> {
         return try {
-            val response = ratingsApi.getRatingsByUser(userId)
-            Result.success(response)
-        } catch (e: Exception) {
-            Result.failure(ApiError.NetworkError(e))
-        }
-    }
-    
-    suspend fun getAverageRating(userId: Int): Result<Double> {
-        return try {
-            val response = ratingsApi.getAverageRating(userId)
-            Result.success(response)
+            Result.success(ratingsApi.getRatings(professionalId))
         } catch (e: Exception) {
             Result.failure(ApiError.NetworkError(e))
         }
     }
 }
-

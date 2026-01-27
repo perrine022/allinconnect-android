@@ -10,22 +10,19 @@ import javax.inject.Singleton
 class NotificationPreferencesRepository @Inject constructor(
     private val notificationPreferencesApi: NotificationPreferencesApi
 ) {
-    suspend fun getNotificationPreferences(): Result<NotificationPreferencesResponse> {
+    suspend fun getPreferences(): Result<NotificationPreferencesResponse> {
         return try {
-            val response = notificationPreferencesApi.getNotificationPreferences()
-            Result.success(response)
+            Result.success(notificationPreferencesApi.getPreferences())
         } catch (e: Exception) {
             Result.failure(ApiError.NetworkError(e))
         }
     }
     
-    suspend fun updateNotificationPreferences(request: NotificationPreferencesRequest): Result<Unit> {
+    suspend fun updatePreferences(request: NotificationPreferencesRequest): Result<NotificationPreferencesResponse> {
         return try {
-            notificationPreferencesApi.updateNotificationPreferences(request)
-            Result.success(Unit)
+            Result.success(notificationPreferencesApi.updatePreferences(request))
         } catch (e: Exception) {
             Result.failure(ApiError.NetworkError(e))
         }
     }
 }
-

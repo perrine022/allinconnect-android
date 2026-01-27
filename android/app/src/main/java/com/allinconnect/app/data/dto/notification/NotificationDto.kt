@@ -19,4 +19,3 @@ data class NotificationPreferencesRequest(
     val notificationRadius: Int,
     val preferredCategories: List<String>
 )
-

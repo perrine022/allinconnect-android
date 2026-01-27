@@ -20,4 +20,3 @@ data class User(
     val fullName: String
         get() = "$firstName $lastName"
 }
-
