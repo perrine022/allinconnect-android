@@ -1,5 +1,7 @@
 package com.allinconnect.app.core.config
 
+import com.allinconnect.app.BuildConfig
+
 object ApiConfig {
     const val BASE_URL = BuildConfig.API_BASE_URL
     

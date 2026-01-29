@@ -16,6 +16,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.allinconnect.app.presentation.navigation.Screen
 import com.allinconnect.app.presentation.theme.AppGradient
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubscribeScreen(
     onNavigateBack: () -> Unit,

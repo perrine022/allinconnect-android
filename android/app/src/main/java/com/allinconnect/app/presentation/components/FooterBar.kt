@@ -8,9 +8,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.allinconnect.app.core.state.TabItem
 import com.allinconnect.app.presentation.theme.AppDarkRed1
@@ -19,11 +19,11 @@ import com.allinconnect.app.presentation.theme.AppRed
 
 @Composable
 fun FooterBar(
-    selectedTab: androidx.compose.runtime.State<TabItem>,
+    selectedTab: State<TabItem>,
     onTabSelected: (TabItem) -> Unit,
+    modifier: Modifier = Modifier,
     showProfileBadge: Boolean = false,
-    isLoggedIn: Boolean = true,
-    modifier: Modifier = Modifier
+    isLoggedIn: Boolean = true
 ) {
     val tabs = listOf(
         TabItem.HOME to ("Accueil" to Icons.Default.Home),
@@ -47,7 +47,10 @@ fun FooterBar(
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            tabs.forEach { (tab, (label, icon)) ->
+            tabs.forEach { tabPair ->
+                val tab = tabPair.first
+                val label = tabPair.second.first
+                val icon = tabPair.second.second
                 val isAccessible = tab == TabItem.HOME || isLoggedIn
                 val isSelected = selectedTab.value == tab
                 

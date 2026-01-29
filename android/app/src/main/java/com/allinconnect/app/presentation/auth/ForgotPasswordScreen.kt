@@ -7,6 +7,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -15,9 +17,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.allinconnect.app.presentation.auth.viewmodel.ForgotPasswordViewModel
 import com.allinconnect.app.presentation.theme.AppGradient
 import com.allinconnect.app.presentation.theme.AppGold
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ForgotPasswordScreen(
     onNavigateBack: () -> Unit,
@@ -59,7 +63,7 @@ fun ForgotPasswordScreen(
             if (!isEmailSent) {
                 // Lock icon
                 Icon(
-                    imageVector = androidx.compose.material.icons.Icons.Default.Lock,
+                    imageVector = Icons.Default.Lock,
                     contentDescription = null,
                     modifier = Modifier.size(100.dp),
                     tint = androidx.compose.ui.graphics.Color.White
@@ -123,7 +127,7 @@ fun ForgotPasswordScreen(
             } else {
                 // Success message
                 Icon(
-                    imageVector = androidx.compose.material.icons.Icons.Default.CheckCircle,
+                    imageVector = Icons.Default.CheckCircle,
                     contentDescription = null,
                     modifier = Modifier.size(60.dp),
                     tint = androidx.compose.ui.graphics.Color.Green

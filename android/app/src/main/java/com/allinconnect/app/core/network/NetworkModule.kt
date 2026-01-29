@@ -11,7 +11,8 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import okhttp3.MediaType.Companion.toMediaType
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -73,7 +74,7 @@ object NetworkModule {
         return Retrofit.Builder()
             .baseUrl(ApiConfig.BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(json.asConverterFactory(okhttp3.MediaType.get("application/json")))
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
     }
 }

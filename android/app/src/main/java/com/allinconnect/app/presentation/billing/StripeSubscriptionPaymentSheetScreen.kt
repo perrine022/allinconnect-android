@@ -1,6 +1,6 @@
 package com.allinconnect.app.presentation.billing
 
-import android.app.Activity
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -24,7 +24,15 @@ fun StripeSubscriptionPaymentSheetScreen(
     onPaymentResult: (Boolean, String?) -> Unit
 ) {
     val context = LocalContext.current
-    val activity = context as? Activity
+    val activity = context as? ComponentActivity
+    
+    if (activity == null) {
+        // Show error if not ComponentActivity
+        LaunchedEffect(Unit) {
+            onPaymentResult(false, "Activity non supportée")
+        }
+        return
+    }
     val scope = rememberCoroutineScope()
     val helper = remember { StripePaymentSheetHelper() }
     

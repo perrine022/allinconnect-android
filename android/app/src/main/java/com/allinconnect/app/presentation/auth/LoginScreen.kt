@@ -24,10 +24,16 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.allinconnect.app.presentation.auth.viewmodel.LoginViewModel
 import com.allinconnect.app.presentation.components.FooterBar
 import com.allinconnect.app.presentation.theme.AppGradient
 import com.allinconnect.app.presentation.theme.AppRed
 
+@OptIn(
+    ExperimentalMaterial3Api::class,
+    androidx.compose.foundation.ExperimentalFoundationApi::class,
+    androidx.compose.ui.ExperimentalComposeUiApi::class
+)
 @Composable
 fun LoginScreen(
     onNavigateToTabBar: () -> Unit,

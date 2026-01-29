@@ -1,6 +1,6 @@
 package com.allinconnect.app.core.stripe
 
-import android.app.Activity
+import androidx.activity.ComponentActivity
 import com.stripe.android.PaymentConfiguration
 import com.stripe.android.paymentsheet.PaymentSheet
 import com.stripe.android.paymentsheet.PaymentSheetResult
@@ -9,32 +9,39 @@ import kotlin.coroutines.resume
 
 class StripePaymentSheetHelper {
     
-    private var paymentSheet: PaymentSheet? = null
+    private var currentContinuation: kotlin.coroutines.Continuation<PaymentSheetResult>? = null
     
-    fun initialize(publishableKey: String, activity: Activity) {
+    fun initialize(publishableKey: String, activity: ComponentActivity) {
         PaymentConfiguration.init(activity, publishableKey)
-        paymentSheet = PaymentSheet(activity) { paymentResult ->
-            // Result handled in presentPaymentSheet
-        }
     }
     
     suspend fun presentPaymentSheet(
-        activity: Activity,
+        activity: ComponentActivity,
         clientSecret: String,
         customerId: String? = null,
         ephemeralKeySecret: String? = null
     ): PaymentSheetResult = suspendCancellableCoroutine { continuation ->
-        val configuration = PaymentSheet.Configuration.Builder("All In Connect").apply {
-            customerId?.let { setCustomer(it) }
-            ephemeralKeySecret?.let { setEphemeralKey(it) }
-        }.build()
+        currentContinuation = continuation
         
-        paymentSheet?.presentWithPaymentIntent(
-            clientSecret = clientSecret,
-            configuration = configuration,
-            callback = { result ->
-                continuation.resume(result)
-            }
-        ) ?: continuation.resume(PaymentSheetResult.Failed(Exception("PaymentSheet not initialized")))
+        val configurationBuilder = PaymentSheet.Configuration.Builder("All In Connect")
+        // Only configure customer if we have both customerId and ephemeralKeySecret
+        if (customerId != null && ephemeralKeySecret != null) {
+            val customerConfig = PaymentSheet.CustomerConfiguration(
+                id = customerId,
+                ephemeralKeySecret = ephemeralKeySecret
+            )
+            configurationBuilder.customer(customerConfig)
+        }
+        val configuration = configurationBuilder.build()
+        
+        val paymentSheet = PaymentSheet(activity) { result ->
+            currentContinuation?.resume(result)
+            currentContinuation = null
+        }
+        
+        paymentSheet.presentWithPaymentIntent(
+            paymentIntentClientSecret = clientSecret,
+            configuration = configuration
+        )
     }
 }

@@ -1,10 +1,11 @@
 package com.allinconnect.app.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavArgument
+import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
 import com.allinconnect.app.presentation.auth.*
 import com.allinconnect.app.presentation.billing.*
@@ -87,6 +88,28 @@ sealed class Screen(val route: String) {
             publishableKey: String?
         ) = "stripe_subscription_payment_sheet/${clientSecret ?: ""}/${customerId ?: ""}/${ephemeralKeySecret ?: ""}/${publishableKey ?: ""}"
     }
+}
+
+// Helper function to create NamedNavArgument
+// In Navigation Compose, NamedNavArgument is a typealias for Pair<String, NavArgument>
+private fun navArgument(
+    name: String,
+    type: NavType<*>,
+    nullable: Boolean = false,
+    defaultValue: Any? = null
+): NamedNavArgument {
+    val builder = NavArgument.Builder()
+        .setType(type)
+    if (nullable) {
+        builder.setIsNullable(true)
+    }
+    if (defaultValue != null) {
+        builder.setDefaultValue(defaultValue)
+    }
+    val navArg = builder.build()
+    // NamedNavArgument is a typealias for Pair<String, NavArgument> in Navigation Compose
+    @Suppress("UNCHECKED_CAST")
+    return Pair(name, navArg) as NamedNavArgument
 }
 
 @Composable
@@ -216,7 +239,9 @@ fun AppNavigation() {
         
         composable(
             route = Screen.OfferDetail.route,
-            arguments = listOf(navArgument("offerId") { type = NavType.IntType })
+            arguments = listOf(
+                navArgument("offerId", NavType.IntType)
+            )
         ) { backStackEntry ->
             val offerId = backStackEntry.arguments?.getInt("offerId") ?: 0
             OfferDetailScreen(
@@ -227,7 +252,9 @@ fun AppNavigation() {
         
         composable(
             route = Screen.PartnerDetail.route,
-            arguments = listOf(navArgument("partnerId") { type = NavType.IntType })
+            arguments = listOf(
+                navArgument("partnerId", NavType.IntType)
+            )
         ) { backStackEntry ->
             val partnerId = backStackEntry.arguments?.getInt("partnerId") ?: 0
             PartnerDetailScreen(
@@ -375,7 +402,7 @@ fun AppNavigation() {
         composable(
             route = Screen.StripePaymentSheet.route,
             arguments = listOf(
-                navArgument("clientSecret") { type = NavType.StringType; nullable = true }
+                navArgument("clientSecret", NavType.StringType, nullable = true)
             )
         ) { backStackEntry ->
             val clientSecret = backStackEntry.arguments?.getString("clientSecret")
@@ -393,8 +420,8 @@ fun AppNavigation() {
         composable(
             route = Screen.PaymentResult.route + "?success={success}&message={message}",
             arguments = listOf(
-                navArgument("success") { type = NavType.BoolType; defaultValue = false },
-                navArgument("message") { type = NavType.StringType; nullable = true; defaultValue = null }
+                navArgument("success", NavType.BoolType, defaultValue = false),
+                navArgument("message", NavType.StringType, nullable = true, defaultValue = null)
             )
         ) { backStackEntry ->
             val success = backStackEntry.arguments?.getBoolean("success") ?: false
@@ -415,10 +442,10 @@ fun AppNavigation() {
         composable(
             route = Screen.StripeSubscriptionPaymentSheet.route,
             arguments = listOf(
-                navArgument("clientSecret") { type = NavType.StringType; nullable = true },
-                navArgument("customerId") { type = NavType.StringType; nullable = true },
-                navArgument("ephemeralKeySecret") { type = NavType.StringType; nullable = true },
-                navArgument("publishableKey") { type = NavType.StringType; nullable = true }
+                navArgument("clientSecret", NavType.StringType, nullable = true),
+                navArgument("customerId", NavType.StringType, nullable = true),
+                navArgument("ephemeralKeySecret", NavType.StringType, nullable = true),
+                navArgument("publishableKey", NavType.StringType, nullable = true)
             )
         ) { backStackEntry ->
             val clientSecret = backStackEntry.arguments?.getString("clientSecret")

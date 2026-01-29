@@ -143,20 +143,18 @@ fun SavingsListScreen(
                                     )
                                     
                                     saving.date.let { dateStr ->
-                                        try {
+                                        val formattedDate = try {
                                             val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                                             val outputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                                             val date = inputFormat.parse(dateStr)
-                                            Text(
-                                                text = outputFormat.format(date ?: Date()),
-                                                style = MaterialTheme.typography.bodySmall
-                                            )
+                                            outputFormat.format(date ?: Date())
                                         } catch (e: Exception) {
-                                            Text(
-                                                text = dateStr,
-                                                style = MaterialTheme.typography.bodySmall
-                                            )
+                                            dateStr
                                         }
+                                        Text(
+                                            text = formattedDate,
+                                            style = MaterialTheme.typography.bodySmall
+                                        )
                                     }
                                 }
                             }

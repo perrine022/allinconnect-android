@@ -45,13 +45,39 @@ android {
         jvmTarget = "17"
     }
 
+    // KAPT configuration for Java 17+
+    kapt {
+        javacOptions {
+            option("--add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED")
+            option("--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED")
+            option("--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED")
+            option("--add-opens=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED")
+            option("--add-opens=jdk.compiler/com.sun.tools.javac.jvm=ALL-UNNAMED")
+            option("--add-opens=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED")
+            option("--add-opens=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED")
+            option("--add-opens=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED")
+            option("--add-opens=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED")
+            option("--add-opens=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED")
+        }
+    }
+    
+    // Configure Kotlin compilation tasks for Java 17+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+        kotlinOptions {
+            jvmTarget = "17"
+            freeCompilerArgs = freeCompilerArgs + listOf(
+                "-Xjvm-default=all"
+            )
+        }
+    }
+
     buildFeatures {
         compose = true
         buildConfig = true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
+        kotlinCompilerExtensionVersion = "1.5.8"
     }
 
     packaging {
@@ -83,10 +109,13 @@ dependencies {
 
     // Networking
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-kotlinx-serialization-json:1.0.0")
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    
+    // Gson (for CacheService)
+    implementation("com.google.code.gson:gson:2.10.1")
 
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")

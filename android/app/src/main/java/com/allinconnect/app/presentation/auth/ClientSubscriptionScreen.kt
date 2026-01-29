@@ -16,6 +16,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.allinconnect.app.presentation.theme.AppGradient
 import com.allinconnect.app.presentation.theme.AppGold
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ClientSubscriptionScreen(
     onNavigateBack: () -> Unit,
